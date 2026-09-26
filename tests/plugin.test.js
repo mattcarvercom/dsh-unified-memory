@@ -3,7 +3,7 @@ import { mkdir, readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, it } from "node:test";
 import { parseFrontmatter } from "../lib/frontmatter.js";
-import { apply, rootsFrom } from "../lib/index.js";
+import { apply, Config, rootsFrom } from "../lib/index.js";
 import { projectKey } from "../lib/keys.js";
 import { writeState } from "../lib/state.js";
 import { claudeMemoryDir, claudeOld, dshMade, dshMemoryDir, makeRoots, putMemory } from "./helpers.js";
@@ -143,5 +143,11 @@ describe("memory tool", () => {
     const text = sections[0].text({ scope });
     assert.match(text, /shared with Claude Code/);
     assert.match(text, /no-emdash\.md/);
+  });
+});
+
+describe("config defaults", () => {
+  it("defaults promptMode to feedback", () => {
+    assert.equal(Config({}).promptMode, "feedback");
   });
 });

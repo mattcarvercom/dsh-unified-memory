@@ -1,12 +1,10 @@
 # dsh-unified-memory
 
-Long-term memory for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh), stored as plain markdown files in Claude Code's memory format. Run it as dsh's own private store, as a private store that also reads Claude Code's memories, or as one store shared with Claude Code so both agents read and write the same memories.
-
-**It keeps the fixed cost of memory small.** Whatever a memory system puts in the system prompt takes up context on every turn, whether or not the task needs it. Memory tools that preload their whole index, Claude Code's `MEMORY.md` included, pay a little more on every turn with each memory they save. By default this plugin preloads only your standing feedback rules (about 1k tokens for a hundred memories) and finds everything else through a local SQLite full-text index when a task calls for it. On one store of about 150 memories, that is roughly 1.3k tokens per turn against about 15k with the whole index preloaded. The per-turn cost stays nearly flat as the store grows, and each memory costs context only in the turns that actually use it.
+Long-term memory for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) that keeps the per-turn cost of memory small. Whatever a memory system puts in the system prompt takes up context on every turn, whether or not the task needs it, so memory tools that preload their whole index, Claude Code's `MEMORY.md` included, get more expensive with every memory they save. This plugin preloads only your standing feedback rules and finds everything else through a local SQLite full-text index when a task calls for it. On one store of about 150 memories, that is roughly 1.3k tokens per turn against about 15k with the whole index preloaded. The per-turn cost stays nearly flat as the store grows, and each memory costs context only in the turns that actually use it.
 
 That matters most where context is scarce. A locally hosted model often runs with a context window of a few tens of thousands of tokens, and every token spent on memory it will not use comes out of the room left for code, tool output and reasoning, and is prefilled again on hardware that has none to spare. Long agentic runs feel the same pressure over hundreds of turns. A memory that grows without growing the prompt lets these setups remember as much as a large hosted deployment, without giving up the context they need to do the work.
 
-Every file dsh creates says so in its frontmatter, which makes switching modes a mechanical migration and lets you remove everything dsh ever wrote with one command.
+Memories are plain markdown files in Claude Code's memory format. Run it as dsh's own private store, as a private store that also reads Claude Code's memories, or as one store shared with Claude Code so both agents read and write the same memories. Every file dsh creates says so in its frontmatter, which makes switching modes a mechanical migration and lets you remove everything dsh ever wrote with one command.
 
 ## Modes
 
@@ -71,8 +69,8 @@ Override the `memory` row in your profile's `cordis.patch.yml`. The override rep
 | `projectAliases` | `{}` | Project key to canonical key, so several checkouts share one folder |
 | `promptMode` | `feedback` | `feedback` injects only the standing feedback rules and relies on search; `full` also injects each folder's `MEMORY.md` and a file list |
 | `includeInPrompt` | `true` | Inject the memory section into the system prompt |
-| `maxIndexLines` / `maxIndexBytes` | `200` / `25000` | How much of `MEMORY.md` is injected |
-| `maxList` | `200` | Cap on files listed in `full` mode |
+| `maxIndexLines` / `maxIndexBytes` | `200` / `25000` | How much of `MEMORY.md` is injected in `full` mode |
+| `maxList` | `200` | Default cap for the `list` action, and on files listed in the prompt in `full` mode |
 | `searchLimit` | `5` | Default hits returned by search |
 | `indexDir` | `$XDG_CACHE_HOME/dsh-unified-memory` | Search index cache |
 | `minResyncIntervalMs` | `60000` | Minimum time between automatic rescans of a folder for search; dsh's own writes reindex immediately |
