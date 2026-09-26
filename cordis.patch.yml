@@ -5,7 +5,7 @@
 #   - id: memory
 #     config:
 #       mode: shared          # dsh | overlay | shared (omit to follow `mem mode`)
-#       promptMode: feedback  # preload only feedback rules; search the rest
+#       promptMode: full      # feedback (default) | full: also preload MEMORY.md
 #
 # Change modes with `mem mode <mode> --dry-run`, then `mem mode <mode>`:
 # setting `mode` here alone never moves files.

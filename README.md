@@ -2,6 +2,10 @@
 
 Long-term memory for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh), stored as plain markdown files in Claude Code's memory format. Run it as dsh's own private store, as a private store that also reads Claude Code's memories, or as one store shared with Claude Code so both agents read and write the same memories.
 
+**It keeps the fixed cost of memory small.** Whatever a memory system puts in the system prompt takes up context on every turn, whether or not the task needs it. Memory tools that preload their whole index, Claude Code's `MEMORY.md` included, pay a little more on every turn with each memory they save. By default this plugin preloads only your standing feedback rules (about 1k tokens for a hundred memories) and finds everything else through a local SQLite full-text index when a task calls for it. On one store of about 150 memories, that is roughly 1.3k tokens per turn against about 15k with the whole index preloaded. The per-turn cost stays nearly flat as the store grows, and each memory costs context only in the turns that actually use it.
+
+That matters most where context is scarce. A locally hosted model often runs with a context window of a few tens of thousands of tokens, and every token spent on memory it will not use comes out of the room left for code, tool output and reasoning, and is prefilled again on hardware that has none to spare. Long agentic runs feel the same pressure over hundreds of turns. A memory that grows without growing the prompt lets these setups remember as much as a large hosted deployment, without giving up the context they need to do the work.
+
 Every file dsh creates says so in its frontmatter, which makes switching modes a mechanical migration and lets you remove everything dsh ever wrote with one command.
 
 ## Modes
@@ -19,7 +23,7 @@ Every file dsh creates says so in its frontmatter, which makes switching modes a
 ## Install
 
 ```sh
-dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.0
+dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.1
 ```
 
 Restart `dsh web` afterwards. The plugin starts in `dsh` mode (its own store in `~/.dsh/memory`); see [Modes](#modes) to share memories with Claude Code.
@@ -56,7 +60,7 @@ Override the `memory` row in your profile's `cordis.patch.yml`. The override rep
 - id: memory
   config:
     mode: shared
-    promptMode: feedback
+    promptMode: full
 ```
 
 | Key | Default | Meaning |
@@ -65,7 +69,7 @@ Override the `memory` row in your profile's `cordis.patch.yml`. The override rep
 | `dshRoot` | `$DSH_HOME/memory`, else `~/.dsh/memory` | The dsh store |
 | `claudeRoot` | `$CLAUDE_CONFIG_DIR` or `~/.claude` | Claude Code's home |
 | `projectAliases` | `{}` | Project key to canonical key, so several checkouts share one folder |
-| `promptMode` | `full` | `full` injects each folder's `MEMORY.md` and a file list; `feedback` injects only the standing feedback rules and relies on search |
+| `promptMode` | `feedback` | `feedback` injects only the standing feedback rules and relies on search; `full` also injects each folder's `MEMORY.md` and a file list |
 | `includeInPrompt` | `true` | Inject the memory section into the system prompt |
 | `maxIndexLines` / `maxIndexBytes` | `200` / `25000` | How much of `MEMORY.md` is injected |
 | `maxList` | `200` | Cap on files listed in `full` mode |
@@ -149,7 +153,7 @@ dsh sessions often start deeper than where Claude Code was launched, so the plug
 
 `memory action=search` and `mem search` use a SQLite FTS5 index (built into Node's `node:sqlite`, no native dependency) with Porter stemming and bm25 ranking, name and description weighted above the body. The markdown files are the only source of truth: the index lives in `indexDir`, is updated incrementally, and can be deleted at any time.
 
-With `promptMode: feedback`, only the standing feedback rules are preloaded (about 1k tokens for a hundred memories) and the agent searches for everything else per task, which suits models with small context windows.
+With the default `promptMode: feedback`, only the standing feedback rules are preloaded (about 1k tokens for a hundred memories) and the agent searches for everything else per task. `promptMode: full` also preloads each `MEMORY.md` and a file list, which saves a search call per task at the cost of a prompt that grows with the store; before 1.0.1 it was the default.
 
 ## The agent's tool
 
