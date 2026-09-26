@@ -60,7 +60,7 @@ Override the `memory` row in your profile's `cordis.patch.yml`. The override rep
 - id: memory
   config:
     mode: shared
-    promptMode: full
+    promptMode: full    # opt out of the default (feedback) and also preload MEMORY.md
 ```
 
 | Key | Default | Meaning |
