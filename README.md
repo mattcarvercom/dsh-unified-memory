@@ -6,6 +6,8 @@ That matters most where context is scarce. A locally hosted model often runs wit
 
 Memories are plain markdown files in Claude Code's memory format. Run it as dsh's own private store, as a private store that also reads Claude Code's memories, or as one store shared with Claude Code so both agents read and write the same memories. Every file dsh creates says so in its frontmatter, which makes switching modes a mechanical migration and lets you remove everything dsh ever wrote with one command.
 
+If you also use opencode, [this fork of opencode-claude-memory](https://github.com/mattcarvercom/opencode-claude-memory) shares the same Claude Code memory folders and keeps dsh's provenance intact: it edits frontmatter line by line instead of rewriting files, marks what it writes with `origin: opencode`, and keeps a copy of any dsh memory it deletes.
+
 ## Modes
 
 | Mode | dsh writes to | dsh reads and searches | Claude Code sees dsh's memories |
