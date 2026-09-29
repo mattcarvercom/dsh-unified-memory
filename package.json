@@ -1,6 +1,6 @@
 {
   "name": "dsh-unified-memory",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Long-term memory for DeepSeek Harness in Claude Code's format: a private store, an overlay that also reads Claude Code's memories, or one store shared with Claude Code, with provenance on every file.",
   "type": "module",
   "main": "lib/index.js",
@@ -18,7 +18,8 @@
     ".": "./lib/index.js",
     "./frontmatter": "./lib/frontmatter.js",
     "./store": "./lib/store.js",
-    "./keys": "./lib/keys.js"
+    "./keys": "./lib/keys.js",
+    "./package.json": "./package.json"
   },
   "scripts": {
     "test": "node --no-warnings --test tests/*.test.js"
