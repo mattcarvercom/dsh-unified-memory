@@ -23,7 +23,7 @@ If you also use opencode, [this fork of opencode-claude-memory](https://github.c
 ## Install
 
 ```sh
-dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.2
+dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.3
 ```
 
 Restart `dsh web` afterwards. The plugin starts in `dsh` mode (its own store in `~/.dsh/memory`); see [Modes](#modes) to share memories with Claude Code.
@@ -40,7 +40,7 @@ dsh plugin --profile web add ./dsh-unified-memory
 
 | | |
 |---|---|
-| dsh | Tested with DeepSeek Harness 0.2.2-alpha.2 (source checkout `a6d0333`), `web` profile |
+| dsh | Declared range `engines.dsh: >=0.2.2-rc.3 <0.2.3`; tested with DeepSeek Harness 0.2.2-rc.3 (upstream `39163dd30f`, checkout `a6d0333c73`), `web` profile |
 | Node | Whatever dsh requires (22.19+ or 24+), which includes the built-in `node:sqlite` used for search; tested on Node 25.8.0 |
 | Claude Code | Key and folder rules verified against Claude Code 2.1.282; only needed for `overlay` and `shared` modes |
 | Platforms | Linux and macOS tested paths; Windows paths follow the same key rule but are untested |
