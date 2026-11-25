@@ -23,7 +23,7 @@ If you also use opencode, [this fork of opencode-claude-memory](https://github.c
 ## Install
 
 ```sh
-dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.4
+dsh plugin --profile web add github:mattcarvercom/dsh-unified-memory#v1.0.5
 ```
 
 Restart `dsh web` afterwards. The plugin starts in `dsh` mode (its own store in `~/.dsh/memory`); see [Modes](#modes) to share memories with Claude Code.
@@ -40,8 +40,8 @@ dsh plugin --profile web add ./dsh-unified-memory
 
 | | |
 |---|---|
-| dsh | Declared range `engines.dsh: >=0.2.2-rc.5 <0.2.3`; tested with DeepSeek Harness 0.2.2-rc.5 (upstream `2e39e70496`, checkout `3469d958a5`), `web` profile |
-| Node | Whatever dsh requires (22.19+ or 24+), which includes the built-in `node:sqlite` used for search; tested on Node 25.8.0 |
+| dsh | Declared range `engines.dsh: >=0.2.3-alpha.2 <0.2.4`; tested with DeepSeek Harness 0.2.3-alpha.2 (upstream `4b399c39a6`, checkout `99f2d664d8`), `web` profile |
+| Node | Whatever dsh requires (24.22.3+ or 26.13.1+), which includes the built-in `node:sqlite` used for search; tested on Node 24.22.3 |
 | Claude Code | Key and folder rules verified against Claude Code 2.1.282; only needed for `overlay` and `shared` modes |
 | Platforms | Linux and macOS tested paths; Windows paths follow the same key rule but are untested |
 | Dependencies | None beyond the dsh runtime (`@deepseek-ai/dsh-tools`, `@deepseek-ai/schemastery`) |
